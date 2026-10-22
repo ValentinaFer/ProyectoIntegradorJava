@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public abstract class Pedido {
@@ -87,7 +88,7 @@ public abstract class Pedido {
         return this.estado;
     }
 
-    public abstract double calcularCosto(Vehiculo vehiculo);
+    public abstract BigDecimal calcularCosto(Vehiculo vehiculo);
 
 }
 

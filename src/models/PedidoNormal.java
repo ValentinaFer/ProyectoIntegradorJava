@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class PedidoNormal extends Pedido{
@@ -8,8 +9,8 @@ public class PedidoNormal extends Pedido{
     }
 
     @Override
-    public double calcularCosto(Vehiculo vehiculo) {
-        return 1000 + (this.getDistanciaKm()*vehiculo.getCostoPorKm());
+    public BigDecimal calcularCosto(Vehiculo vehiculo) {
+        return new BigDecimal("1000").add(BigDecimal.valueOf(this.getDistanciaKm()).multiply(vehiculo.getCostoPorKm()));
     }
     
 }

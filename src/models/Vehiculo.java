@@ -1,10 +1,12 @@
+import java.math.BigDecimal;
+
 public abstract class Vehiculo {
     private String patente;
     private double capacidadKg;
     private double velocidadKmH;
-    private double costoPorKm;
+    private BigDecimal costoPorKm;
 
-    public Vehiculo(String patente, double capacidadKg, double velocidadKmH, double costoPorKm){
+    public Vehiculo(String patente, double capacidadKg, double velocidadKmH, BigDecimal costoPorKm){
         setPatente(patente);
         setCapacidadKg(capacidadKg);
         setVelocidadKmH(velocidadKmH);
@@ -32,8 +34,8 @@ public abstract class Vehiculo {
         this.velocidadKmH = velocidadKmH;
     }
 
-    public void setCostoPorKm(double costoPorKm){
-        if (costoPorKm <= 0){
+    public void setCostoPorKm(BigDecimal costoPorKm){
+        if (costoPorKm == null || costoPorKm.compareTo(BigDecimal.ZERO) <= 0){
             throw new IllegalArgumentException("La velocidad media del vehiculo no puede ser negativa ni cero.");
         }
         this.costoPorKm = costoPorKm;
@@ -51,7 +53,7 @@ public abstract class Vehiculo {
         return this.velocidadKmH;
     }
 
-    public double getCostoPorKm(){
+    public BigDecimal getCostoPorKm(){
         return this.costoPorKm;
     }
 
