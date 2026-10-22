@@ -1,5 +1,5 @@
-class Cliente {
-    private static int nextCodigo = 1;
+public class Cliente {
+    private static int nextCodigo = 1; //consider this a little better
     private int codigo;
     private String nombre;
     private String telefono;
@@ -8,16 +8,19 @@ class Cliente {
     public Cliente(String nombre, String telefono, String zoneCiudad){
         this.codigo = nextCodigo++;
         this.setNombre(nombre);
+        this.setTelefono(telefono);
+        this.setZonaCiudad(zoneCiudad);
     }
 
     public Cliente(){
 
     }
 
-    public void setCodigo(){
-        if (this.codigo > 0){
-            
+    public void setCodigo(int codigo){
+        if (this.codigo <= 0){
+            throw new IllegalArgumentException("El codigo del cliente no puede ser negativo ni cero.");
         }
+        this.codigo = codigo;
     }
 
     public void setNombre(String nombre){
@@ -49,5 +52,22 @@ class Cliente {
 
     public int getCodigo(){
         return this.codigo;
+    }
+
+    public String getNombre(){
+        return this.nombre;
+    }
+
+    public String getTelefono(){
+        return this.telefono;
+    }
+
+    public String getZonaCiudad(){
+        return this.zonaCiudad;
+    }
+
+    @Override
+    public String toString() {
+        return "[Cliente nro "+getCodigo()+"]\nNombre: "+getNombre()+",\nTelefono: "+getTelefono()+",\nZona ciudad: "+getZonaCiudad();
     }
 }
