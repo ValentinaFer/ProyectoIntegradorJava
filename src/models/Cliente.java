@@ -1,3 +1,5 @@
+package models;
+
 public class Cliente {
     private static int nextCodigo = 1; //consider this a little better
     private int codigo;

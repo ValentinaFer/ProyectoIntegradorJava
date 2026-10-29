@@ -1,3 +1,5 @@
+package models;
+
 import java.math.BigDecimal;
 
 public class Bicicleta extends Vehiculo{
