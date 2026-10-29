@@ -2,7 +2,7 @@ package models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public abstract class Pedido {
+public abstract class Pedido implements Facturable{
     private int codigo;
     private Cliente cliente;
     private String destino;

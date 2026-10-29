@@ -1,10 +1,13 @@
 package models;
-public class Repartidor {
+
+import java.math.BigDecimal;
+
+public class Repartidor implements Facturable{
 
     private String legajo;
     private String nombre;
     private Vehiculo vehiculo;
-    private Pedido[] pedidosAsignados = new Pedido[10];
+    private Pedido[] pedidosAsignados = new Pedido[10]; //no assigning more pedidos without checking if the guy isn't already doing work lol(Rastreable: if the guy is available for more pedidos or not. not if array simply empty, must check Pedidos status)
 
     public Repartidor(String legajo, String nombre, Vehiculo vehiculo, Pedido[] pedidosAsignados){
         
@@ -48,5 +51,10 @@ public class Repartidor {
         this.pedidosAsignados = pedidosAsignados;
     }
 
+    @Override
+    public BigDecimal CalcularImporte() {
+        return null;
+        //10% del importe de los pedidos entregados.
+    }
 
 }
