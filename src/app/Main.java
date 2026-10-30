@@ -3,12 +3,14 @@ package app;
 import java.util.Scanner;
 
 import models.Cliente;
+import models.Repartidor;
+import models.Validation;
 
 //"Contiene el menu y la lectura por teclado"
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
+    private static final CityLink gestor = new CityLink();
     public static void main(String[] args) {
-        CityLink gestor = new CityLink();
         String option;
         while(true){
             System.out.println("[MENU CITYLINK]");
@@ -25,7 +27,7 @@ public class Main {
             option = scanner.nextLine();
             switch (option) {
                 case "1":
-                    
+                    registrarCliente();
                     break;
                 case "9":
                     break;
@@ -38,14 +40,40 @@ public class Main {
         }
     }
 
+    public static void registrarRepartidor(){
+        Repartidor repartidor = new Repartidor();
+        String option;
+        while(true){
+            System.out.println("---[MENU REPARTIDOR NUEVO]---");
+            System.out.println("[1]. Nombre: " + repartidor.getNombre() == null? "": repartidor.getNombre());
+            System.out.println("[2]. Legajo: " + repartidor.getLegajo()==null?"":repartidor.getLegajo());
+            System.out.println("[3]. Vehiculo: "+ repartidor.getVehiculo() == null? "Sin vehiculo": "Patente: "+repartidor.getVehiculo().getPatente());
+            System.out.println("[4]. CANCELAR;");
+            System.out.println("[5]. GUARDAR");
+            System.out.println("Ingrese el campo a modificar:");
+            option = scanner.nextLine();
+            switch (option) {
+                case "1":
+                    repartidor.setNombre(askNombre());
+                    break;
+                case "2":
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+
     public static void registrarCliente(){
         Cliente cliente = new Cliente();
         String option;
         while (true){
             System.out.println("---[MENU CLIENTE NUEVO]---");
-            System.out.println("[1]. Nombre:" + cliente.getNombre()!= null?"":cliente.getNombre());
-            System.out.println("[2]. Telefono:" + cliente.getTelefono()!= null?"":cliente.getTelefono());
-            System.out.println("[3]. Zona Ciudad:" + cliente.getZonaCiudad()!= null?"":cliente.getZonaCiudad());
+            System.out.println("[1]. Nombre:" + cliente.getNombre()== null?"":cliente.getNombre());
+            System.out.println("[2]. Telefono:" + cliente.getTelefono()== null?"":cliente.getTelefono());
+            System.out.println("[3]. Zona Ciudad:" + cliente.getZonaCiudad()== null?"":cliente.getZonaCiudad());
             System.out.println("[4]. CANCELAR;");
             System.out.println("[5]. GUARDAR.");
             System.out.println("Ingrese el campo a modificar:");
@@ -58,22 +86,54 @@ public class Main {
                     cliente.setTelefono(askTelefono());
                     break;
                 case "3":
-                    
+                    cliente.setZonaCiudad(askZonaCiudad());
+                    break;
+                case "4":
+                    System.out.println("CLIENTE CANCELADO");
+                    return;
+                case "5":
+                    if (Validation.getNombreStatus(cliente.getNombre()) == "empty"){
+                        System.out.println("[UY!] El cliente debe tener un nombre antes de guardar.");
+                    } else if (Validation.getTelefonoStatus(cliente.getTelefono()) == "empty"){
+                        System.out.println("[UY!] El cliente debe tener un numero de telefono antes de guardar.");
+                    } else if (Validation.getZonaCiudadStatus(cliente.getZonaCiudad()) == "empty"){
+                        System.out.println("[UY!] El cliente debe tener una zona de ciudad antes de guardar.");
+                    } else {
+                        gestor.addNewClient(cliente);
+                    }
+                    break;
                 default:
                     break;
             }
         }
     }
 
-    public static String askNombre(){
-        String option;
-        while(true){
-            System.out.println("Ingrese el nombre del cliente:");
+    public static String askLegajo(){
+        String option, status;
+        while (true) {
+            System.out.println("Ingrese el legajo del repartidor: ");
             option = scanner.nextLine();
-            if (option.isBlank()){
-                System.out.println("El nombre del cliente no puede estar vacio.");
-            } else if (option.length() > 100){
-                System.out.println("El nombre del cliente no puede superar los 100 caracteres.");
+            status = Validation.getLegajoStatus(option);
+            if (status == "empty"){
+                System.out.println("[UY!] El legajo no puede estar vacio.");
+            } else if (status == "too-long"){
+                System.out.println("[UY!] El legajo no puede superar los 100 caracteres.");
+            } else {
+                return option;
+            }
+        }
+    }
+
+    public static String askNombre(){
+        String option, status;
+        while(true){
+            System.out.println("Ingrese el nombre:");
+            option = scanner.nextLine();
+            status = Validation.getNombreStatus(option);
+            if (status == "empty"){
+                System.out.println("[UY!] El nombre no puede estar vacio.");
+            } else if (status == "too-long"){
+                System.out.println("[UY!] El nombre no puede superar los 100 caracteres.");
             } else {
                 return option;
             }
@@ -81,18 +141,36 @@ public class Main {
     }
 
     public static String askTelefono(){
-        String option;
+        String option, status;
         while (true){
             System.out.println("Ingrese el numero de telefono del cliente:");
             option = scanner.nextLine();
-            if (option.isBlank()){
-                System.out.println("El numero de telefono del cliente no puede estar vacio.");
-            } else if (option.matches("")){ //Look for some common regex for phone numbers. or maybe just try parsing?
-                System.out.println("El numero de telefono del cliente debe seguir un formato valido");
+            status = Validation.getTelefonoStatus(option);
+            if (status == "empty"){
+                System.out.println("[UY!] El numero de telefono del cliente no puede estar vacio.");
+            } else if (status == "too-long"){
+                System.out.println("[UY!] El numero de telefono del cliente no debe superar los 15 caracteres de largo.");
+            } else if (status == "nan"){
+                System.out.println("[UY!] El numero de telefono del cliente debe contener caracteres numericos unicamente.");
             } else {
                 return option;
             }
         }
     }
 
+    public static String askZonaCiudad(){
+        String option, status;
+        while (true) {
+            System.out.println("Ingrese la Zona de Ciudad del cliente:");
+            option = scanner.nextLine();
+            status = Validation.getZonaCiudadStatus(option);
+            if (status == "empty"){
+                System.out.println("[UY!] La zona de ciudad del cliente no puede estar vacia.");
+            } else if (status == "too-long"){
+                System.out.println("[UY!] La zona de ciudad del cliente no puede superar los 300 caracteres.");
+            } else {
+                return option;
+            }
+        }
+    }
 }

@@ -1,14 +1,13 @@
 package models;
 
 public class Cliente {
-    private static int nextCodigo = 1; //consider this a little better
     private int codigo;
     private String nombre;
     private String telefono;
     private String zonaCiudad;
 
     public Cliente(String nombre, String telefono, String zoneCiudad){
-        this.codigo = nextCodigo++;
+        this.setCodigo(codigo);
         this.setNombre(nombre);
         this.setTelefono(telefono);
         this.setZonaCiudad(zoneCiudad);
@@ -26,28 +25,31 @@ public class Cliente {
     }
 
     public void setNombre(String nombre){
-        if (nombre.isBlank()){
+        String status = Validation.getNombreStatus(nombre);
+        if (status == "empty"){
             throw new IllegalArgumentException("El nombre del cliente no puede estar vacio.");
-        } else if (nombre.length() > 100){
+        } else if (status == "too-long"){
             throw new IllegalArgumentException("El nombre del cliente no puede exceder los 100 caracteres.");
         }
         this.nombre = nombre;
     }
 
     public void setTelefono(String telefono){
-        if (telefono.isBlank()){
+        String status = Validation.getTelefonoStatus(telefono);
+        if (status == "empty"){
             throw new IllegalArgumentException("El telefono del cliente no puede estar vacio.");
-        } else if (telefono.length() > 15){
+        } else if (status == "too-long"){
             throw new IllegalArgumentException("El telefono no puede exceder los 15 caracteres.");
-        } else if (telefono.matches("\\d+")){ //TODO: TRY THIS
-            throw new IllegalArgumentException("El telefono debe contener solo caracteres numericos.");
+        } else if (status == "nan"){
+            throw new IllegalArgumentException("El telefono debe contener caracteres numericos unicamente.");
         }
     }
 
     public void setZonaCiudad(String zonaCiudad){
-        if (zonaCiudad.isBlank()){
+        String status = Validation.getZonaCiudadStatus(zonaCiudad);
+        if (status == "empty"){
             throw new IllegalArgumentException("La zona de ciudad del cliente no puede estar vacia.");
-        } else if (zonaCiudad.length() > 300){
+        } else if (status == "too-long"){
             throw new IllegalArgumentException("La zona de ciudad del cliente no puede exceder los 300 caracteres.");
         }
     }

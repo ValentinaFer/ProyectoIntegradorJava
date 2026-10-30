@@ -2,7 +2,9 @@ package models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public abstract class Pedido implements Facturable{
+import exceptions.PedidoInvalidoException;
+
+public abstract class Pedido{
     private int codigo;
     private Cliente cliente;
     private String destino;
@@ -11,7 +13,7 @@ public abstract class Pedido implements Facturable{
     private LocalDateTime fechaHora;
     private EstadoPedido estado;
 
-    public Pedido(int codigo, Cliente cliente, String destino, double pesoKg, double distanciaKm, LocalDateTime fechaHora, EstadoPedido estado){
+    public Pedido(int codigo, Cliente cliente, String destino, double pesoKg, double distanciaKm, LocalDateTime fechaHora, EstadoPedido estado) throws PedidoInvalidoException{
         setCodigo(codigo);
         setCliente(cliente);
         setDestino(destino);
@@ -32,23 +34,23 @@ public abstract class Pedido implements Facturable{
         this.cliente = cliente;
     }
 
-    public void setDestino(String destino){
+    public void setDestino(String destino) throws PedidoInvalidoException{
         if (destino.isBlank()){
-            throw new IllegalArgumentException("El destino del pedido no puede estar vacio.");
+            throw new PedidoInvalidoException("El destino del pedido no puede estar vacio.");
         }
         this.destino = destino;
     }
 
-    public void setPesoKg(double pesoKg){
+    public void setPesoKg(double pesoKg) throws PedidoInvalidoException{
         if (pesoKg <= 0){
-            throw new IllegalArgumentException("El peso del pedido no puede ser negativo o cero.");
+            throw new PedidoInvalidoException("El peso del pedido no puede ser negativo o cero.");
         }
         this.pesoKg = pesoKg;
     }
 
-    public void setDistanciaKm(double distanciaKm){
+    public void setDistanciaKm(double distanciaKm) throws PedidoInvalidoException{
         if (distanciaKm <= 0){
-            throw new IllegalArgumentException("La distancia del pedido no puede ser negativa o cero.");
+            throw new PedidoInvalidoException("La distancia del pedido no puede ser negativa o cero.");
         }
         this.distanciaKm = distanciaKm;
     }
