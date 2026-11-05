@@ -7,6 +7,12 @@ public abstract class Vehiculo {
     private double velocidadKmH;
     private BigDecimal costoPorKm;
 
+    public enum TipoVehiculo {
+        BICICLETA,
+        MOTO,
+        CAMIONETA      
+    }
+
     public Vehiculo(String patente, double capacidadKg, double velocidadKmH, BigDecimal costoPorKm){
         setPatente(patente);
         setCapacidadKg(capacidadKg);
@@ -15,21 +21,24 @@ public abstract class Vehiculo {
     }
 
     public void setPatente(String patente){
-        if (patente.isBlank()){
+        String status = Validation.getPatenteStatus(patente);
+        if (status == "empty"){
             throw new IllegalArgumentException("La patente del vehiculo no puede estar vacia.");
+        } else if (status == "too-long"){
+            throw new IllegalArgumentException("La patente del vehiculo no puede contener mas de 10 caracteres.");
         }
         this.patente = patente;
     }
 
     public void setCapacidadKg(double capacidadKg){
-        if (capacidadKg <= 0){
+        if (!Double.isFinite(capacidadKg) || capacidadKg <= 0){
             throw new IllegalArgumentException("La capacidad del vehiculo no puede ser negativa ni cero.");
         }
         this.capacidadKg = capacidadKg;
     }
 
     public void setVelocidadKmH(double velocidadKmH){
-        if (velocidadKmH <= 0){
+        if (!Double.isFinite(velocidadKmH) || velocidadKmH <= 0){
             throw new IllegalArgumentException("La velocidad media del vehiculo no puede ser negativa ni cero.");
         }
         this.velocidadKmH = velocidadKmH;

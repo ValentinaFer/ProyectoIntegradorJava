@@ -7,6 +7,12 @@ public class Cliente {
     private String zonaCiudad;
 
     public Cliente(String nombre, String telefono, String zoneCiudad){
+        this.setNombre(nombre);
+        this.setTelefono(telefono);
+        this.setZonaCiudad(zoneCiudad);
+    }
+
+    public Cliente(int codigo, String nombre, String telefono, String zoneCiudad){
         this.setCodigo(codigo);
         this.setNombre(nombre);
         this.setTelefono(telefono);
@@ -18,7 +24,7 @@ public class Cliente {
     }
 
     public void setCodigo(int codigo){
-        if (this.codigo <= 0){
+        if (codigo <= 0){
             throw new IllegalArgumentException("El codigo del cliente no puede ser negativo ni cero.");
         }
         this.codigo = codigo;
@@ -43,6 +49,7 @@ public class Cliente {
         } else if (status == "nan"){
             throw new IllegalArgumentException("El telefono debe contener caracteres numericos unicamente.");
         }
+        this.telefono = telefono;
     }
 
     public void setZonaCiudad(String zonaCiudad){
@@ -52,6 +59,7 @@ public class Cliente {
         } else if (status == "too-long"){
             throw new IllegalArgumentException("La zona de ciudad del cliente no puede exceder los 300 caracteres.");
         }
+        this.zonaCiudad = zonaCiudad;
     }
 
     public int getCodigo(){
@@ -72,6 +80,8 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return "[Cliente nro "+getCodigo()+"]\nNombre: "+getNombre()+",\nTelefono: "+getTelefono()+",\nZona ciudad: "+getZonaCiudad();
+        return "["+(this.getCodigo())+"]. " + (this.getNombre());
     }
+
+    
 }

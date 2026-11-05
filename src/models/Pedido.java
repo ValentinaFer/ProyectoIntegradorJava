@@ -4,23 +4,54 @@ import java.time.LocalDateTime;
 
 import exceptions.PedidoInvalidoException;
 
-public abstract class Pedido{
+public abstract class Pedido implements Rastreable{
     private int codigo;
     private Cliente cliente;
     private String destino;
     private double pesoKg;
     private double distanciaKm;
-    private LocalDateTime fechaHora;
+    private LocalDateTime fechaHoraIngreso;
     private EstadoPedido estado;
 
-    public Pedido(int codigo, Cliente cliente, String destino, double pesoKg, double distanciaKm, LocalDateTime fechaHora, EstadoPedido estado) throws PedidoInvalidoException{
+    public enum TipoPedido{
+        PEDIDO_FRAGIL,
+        PEDIDO_NORMAL,
+        PEDIDO_URGENTE;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case PEDIDO_FRAGIL:
+                    return "Pedido Fragil";
+                case PEDIDO_NORMAL:
+                    return "Pedido Normal";
+                case PEDIDO_URGENTE:
+                    return "Pedido Urgente";
+                default:
+                    return null;
+            }
+        }
+    }
+
+    public Pedido(int codigo, Cliente cliente, String destino, double pesoKg, double distanciaKm, LocalDateTime fechaHoraIngreso, EstadoPedido estado) throws PedidoInvalidoException{
         setCodigo(codigo);
         setCliente(cliente);
         setDestino(destino);
         setPesoKg(pesoKg);
         setDistanciaKm(distanciaKm);
-        setFechaHora(fechaHora);
+        setfechaHoraIngreso(fechaHoraIngreso);
         setEstado(estado);
+    }
+
+    public Pedido(Cliente cliente, String destino, double pesoKg, double distanciaKm) throws PedidoInvalidoException{
+        setCliente(cliente);
+        setDestino(destino);
+        setDistanciaKm(distanciaKm);
+        setPesoKg(pesoKg);
+    }
+
+    public Pedido(){
+        
     }
 
     public void setCodigo(int codigo){
@@ -55,8 +86,8 @@ public abstract class Pedido{
         this.distanciaKm = distanciaKm;
     }
 
-    public void setFechaHora(LocalDateTime fechaHora){
-        this.fechaHora = fechaHora;
+    public void setfechaHoraIngreso(LocalDateTime fechaHoraIngreso){
+        this.fechaHoraIngreso = fechaHoraIngreso;
     }
 
     public void setEstado(EstadoPedido estadoPedido){
@@ -83,12 +114,17 @@ public abstract class Pedido{
         return this.distanciaKm;
     }
 
-    public LocalDateTime getFechaHora(){
-        return this.fechaHora;
+    public LocalDateTime getfechaHoraIngreso(){
+        return this.fechaHoraIngreso;
     }
 
     public EstadoPedido getEstado(){
         return this.estado;
+    }
+    
+    @Override
+    public String obtenerEstadoActual() {
+        return this.getEstado().toString();
     }
 
     public abstract BigDecimal calcularCosto(Vehiculo vehiculo);
